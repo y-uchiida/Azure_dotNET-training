@@ -9,6 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using DB_access_sample.Models.Data; /* モデルのデータベースコンテキストへの参照を追加 */
+
+using Microsoft.EntityFrameworkCore; /* データベースを利用するため、Entity Framework Core への参照が必要 */
+using Microsoft.AspNetCore.Mvc;
+
 namespace DB_access_sample
 {
     public class Startup
@@ -24,6 +29,9 @@ namespace DB_access_sample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<MyDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
