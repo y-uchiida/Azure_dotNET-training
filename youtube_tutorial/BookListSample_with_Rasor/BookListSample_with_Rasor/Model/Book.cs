@@ -14,5 +14,7 @@ namespace BookListSample_with_Rasor.Model
 
         /* Author は必須カラムにならなない(生成されるマイグレーションのファイルで、nullable: trueになる) */
         public string Author { get; set; }
+
+        public string ISBN { get; set; }
     }
 }
