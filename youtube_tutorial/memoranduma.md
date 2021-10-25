@@ -80,3 +80,36 @@ Visual Studioの機能を使うとはやいので、`Pages` フォルダを右�
     - 通常通りのform に、タグヘルパーを組み合わせて利用する
 	- 入力に問題があった場合、エラーメッセージを表示する`asp-validation-summary="ModelOnly"`
 	- 各入力値のエラー情報を表示する`asp-validation-for="[column_name]"` など
+
+## データ削除
+- DbContextに、`Remove()` メソッドで削除するオブジェクトを渡す
+  削除対象のIdなどでオブジェクトを取り出しておき、それを引数で渡す
+- その後、変更を確定するために`SaveChangesAsync()` を実行
+
+## API コントローラの作成
+1. プロジェクトに`Controllers` フォルダを作成する
+2. そこに、`${モデル名}Controller.cs` を作成する
+3. `ApplicationDbContext` をメンバプロパティに追加し、コンストラクタで外部から受け取れるようにする
+4. `[HttpGet]` 属性をつけて、メソッドを実装する
+    以下は、Bookモデルのレコードをすべて返す`GetAll`を実装する例
+    ```
+    /* Get リクエストに対するAPIとして設定 */
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Json(new { data = _db.Books.ToList() });
+    }
+    ```
+    これらを追加することで、ControllerのメソッドがURLと紐づけられる
+5. `Startup.cs` を編集
+    - `ConfigureServices()` に`services.AddControllersWithViews()` を追加
+    - `UseEndpoint()` に`endpoints.MapControllers()` を追加
+6. コントローラをAPI用にに設定する  
+    コントローラの冒頭に以下を追加
+    ```
+    /* コントローラで処理するURLのルートを設定 */
+    [Route("api/Book")]
+    /* APIコントローラの設定 */
+    [ApiController]
+    ```
+    

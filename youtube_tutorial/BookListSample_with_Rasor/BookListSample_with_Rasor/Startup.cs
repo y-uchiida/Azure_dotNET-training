@@ -27,6 +27,9 @@ namespace BookListSample_with_Rasor
         {
             services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             object p = services.AddRazorPages();
+
+            /* HTTP リクエストのapiを実装するため、以下を追記 */
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +56,9 @@ namespace BookListSample_with_Rasor
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+
+                /* HTTP リクエストのapiを実装するため、以下を追記 */
+                endpoints.MapControllers();
             });
         }
     }
