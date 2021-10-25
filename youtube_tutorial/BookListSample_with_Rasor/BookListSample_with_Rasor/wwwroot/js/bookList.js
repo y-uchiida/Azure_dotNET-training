@@ -19,7 +19,7 @@ function loadDataTable() {
                 "data": "id",
                 "render": function (data) {
                     return `<div class="text-center">
-                        <a href="/BookList/Edit?id=${data}" class='btn btn-success text-white' style='cursor:pointer; width:70px;'>
+                        <a href="/BookList/Upsert?id=${data}" class='btn btn-success text-white' style='cursor:pointer; width:70px;'>
                             Edit
                         </a>
                         &nbsp;
@@ -43,6 +43,7 @@ function Delete(url) {
         title: "Are you sure?",
         text: "Once deleted, you will not be able to recover",
         icon: "warning",
+        buttons: true,
         dangerMode: true
     }).then(function (willDelete) {
         if (!willDelete) { return; }
