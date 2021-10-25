@@ -1,4 +1,5 @@
 using BookListSample_with_Rasor.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,6 +31,26 @@ namespace BookListSample_with_Rasor.Pages.BookList
         public async Task OnGet()
         {
             Books = await _db.Books.ToListAsync();
+        }
+
+        /* Delete ボタンクリック時に、asp-page-handler でDeleteを指定しているので、
+         * OnPostDelete() が利用できる
+         */
+        public async Task<IActionResult> OnPostDelete(int id)
+        {
+            /* 削除対象のIDでデータベースからレコードを取得し、存在していれば削除する */
+            var book = await _db.Books.FindAsync(id);
+            if (book == null)
+            {
+                /* IDで検索した結果がnull の場合、削除するデータがない */
+                return NotFound();
+            }
+
+            /* 対象レコードを削除して、元の画面に戻る */
+            _db.Books.Remove(book); /* 削除処理をキューへ登録 */
+            await _db.SaveChangesAsync(); /* データベースへの変更を反映 */
+
+            return RedirectToAction("Index");
         }
     }
 }
