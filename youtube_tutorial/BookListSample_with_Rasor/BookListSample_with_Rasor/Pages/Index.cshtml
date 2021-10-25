@@ -1,4 +1,6 @@
 ﻿@page
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment hostingEnv
+
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -8,3 +10,18 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<p> ASPNETCORE_ENVIRONMENT = @hostingEnv.EnvironmentName</p>
+
+<environment include="Development">
+    <div>The effective tag is: &lt;environment include="Development"&gt;</div>
+</environment>
+<environment exclude="Development">
+    <div>The effective tag is: &lt;environment exclude="Development"&gt;</div>
+</environment>
+<environment include="Staging,Staging_2">
+    <div>
+        The effective tag is:
+        &lt;environment include="Staging,Development,Staging_2"&gt;
+    </div>
+</environment>

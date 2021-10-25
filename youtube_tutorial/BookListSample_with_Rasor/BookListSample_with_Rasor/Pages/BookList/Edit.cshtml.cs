@@ -5,23 +5,27 @@ using System.Threading.Tasks;
 
 namespace BookListSample_with_Rasor.Pages.BookList
 {
-    public class CreateModel : PageModel
+    public class EditModel : PageModel
     {
+        /* データベースコンテキストを保持する */
         private readonly ApplicationDbContext _db;
 
-        /* コンストラクタにデータベースの接続情報を入れておく */
-        public CreateModel(ApplicationDbContext db)
+        /* コンストラクタでデータベースコンテキストを受け取って保存(DI) */
+        public EditModel(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        /* Create のページで入力された内容を受け取るため、BindProperty 属性をつけておく */
+        /* フォームから受け取った値で処理を行うので、BindPropertyをつけておく */
         [BindProperty]
         public Book Book { get; set; }
 
 
-        public void OnGet()
+
+        public async Task OnGet(int id)
         {
+            /* データベースから、指定されたIDのレコードを取得する(async/await を用いた非同期アクション) */
+            Book = await _db.Books.FindAsync(id);
         }
 
         /* POST リクエストを受けたときの動作を、OnPost() メソッドで記述する
@@ -30,14 +34,19 @@ namespace BookListSample_with_Rasor.Pages.BookList
          */
         public async Task<IActionResult> OnPost()
         {
-            /* フォームから受け取った内容をバリデーションする */
             if (ModelState.IsValid)
             {
-                /* 変更をキューにプッシュ */
-                await _db.Books.AddAsync(Book);
-                /* 保存処理 */
+                /* 更新するレコードを、Bookモデルのオブジェクトとして取得 */
+                var BookFromDb = await _db.Books.FindAsync(Book.Id);
+
+                /* Name, ISBN, Author の値を、それぞれフォームから受け取った値(Book オブジェクト)で更新 */
+                BookFromDb.Name = Book.Name;
+                BookFromDb.ISBN = Book.ISBN;
+                BookFromDb.Author = Book.Author;
+
+                /* 変更した内容を保存 */
                 await _db.SaveChangesAsync();
-                /* 元の画面に戻る */
+
                 return RedirectToPage("Index");
             }
             else
