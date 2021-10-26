@@ -112,4 +112,11 @@ Visual Studioの機能を使うとはやいので、`Pages` フォルダを右�
     /* APIコントローラの設定 */
     [ApiController]
     ```
-    
+
+## MVC と RazorPage プロジェクトの違い
+Startup.csで読み込みされているものが異なる  
+また、`Pages`フォルダがなくなり、Model, View, Controller の3つに分けられる  
+RazorPage プロジェクトでは Pages配下にサブフォルダを作って、  
+その中にページの`.cshtml` と`.cshtml.cs`をまとめて入れていたが、  
+MVCでは`.cshtml` はView フォルダに、 `.cshtml.cs` はController フォルダに配置される
+
