@@ -120,3 +120,51 @@ RazorPage プロジェクトでは Pages配下にサブフォルダを作って�
 その中にページの`.cshtml` と`.cshtml.cs`をまとめて入れていたが、  
 MVCでは`.cshtml` はView フォルダに、 `.cshtml.cs` はController フォルダに配置される
 
+## APS.NET Core のMVC プロジェクトでデータベースの初期設定～初回マイグレーションまで
+1. 必要パッケージをインストール
+    - EntityFramework Core
+    - EntityFramework Tools
+    - EntityFramework SqlServer
+    - MvcRazorRuntimeCompilation
+
+2. Models/Book.cs を作成
+利用するカラムを、それぞれメンバプロパティとして定義しておく
+
+3. Models/ApplicationDbContext.cs を作成  
+データベース接続情報を受け取るためのオブジェクト  
+あらかじめ、`appsettings.json` でDB接続情報を追加しておく  
+    ```
+    public class ApplicationDbContext : DbContext
+    {
+        /* コンストラクタを作成し、初期化時に外部からDbContext を受け取れるようにしておく */
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+
+        /* データベースとの接続するためのオブジェクトをメンバに持たせる */
+        public DbSet<Book> Books {  get; set; }
+    }
+    ```
+
+4. Startup.cs の編集
+    - DbContextを利用できるようにする
+    - Razorのの機能を有効にする
+    ```
+        public void ConfigureServices(IServiceCollection services)
+        {
+            /* データベースとの接続情報(ConnectionString) を追加する */
+            services.AddDbContext<ApplicationDbContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                );
+
+            /* AddRazorRuntimeCompiration() をメソッドチェインして、Razorが利用できるようにする */
+            //services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+        }
+    ```
+
+5. マイグレーションファイルの生成と実行
+    - マイグレーションファイルの作成  
+      `PM> add-migration CreateBooksTable` 
+    - マイグレーションの実行  
+      `PM> update-databse`
