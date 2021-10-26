@@ -168,3 +168,8 @@ MVCでは`.cshtml` はView フォルダに、 `.cshtml.cs` はController フォ�
       `PM> add-migration CreateBooksTable` 
     - マイグレーションの実行  
       `PM> update-databse`
+
+## TagヘルパーでController へのリンクを制御する
+`asp-controller="{コントローラー名}"`  
+`asp-action="{アクション名}"` 
+
