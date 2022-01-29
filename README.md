@@ -9,8 +9,13 @@ ASP.NET Core でMVCのWebアプリを制作します。
 緩くお手軽に .NET Core Webアプリを作ろう:  
 https://tech-blog.cloud-config.jp/2019-09-10-create-a-netcore-webapp-loosely-and-easily-part1/
 
+<<<<<<< HEAD
 ## 002_youtube_tutorial(2021.10)
 以下のビデオの内容に取り組みます:  
+=======
+## youtube_tutorial(2021.10)
+以下のビデオの内容に取り組みました:  
+>>>>>>> 9015285ed49fb84f9ce6417f3e198352560522f0
 https://www.youtube.com/watch?v=C5cnZ-gZy2I
 
 ## 003_training_ASPNETCore3(2022.01~)  
