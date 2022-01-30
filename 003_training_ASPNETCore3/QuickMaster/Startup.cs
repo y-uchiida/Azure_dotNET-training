@@ -9,6 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/* MSSQL server を使うためには、 EntityFrameworkCoreに加えて SqlServer パッケージも入れておく必要がある */
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
+
+/* DB接続情報を持ったコンテキストを使うため、参照を通す */
+using QuickMaster.Models;
+
 namespace QuickMaster
 {
     public class Startup
@@ -24,6 +31,9 @@ namespace QuickMaster
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            /* コンテキストクラスを利用してDBへ接続するため、コンテキストを追加する */
+            services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
