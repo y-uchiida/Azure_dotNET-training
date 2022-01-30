@@ -1,10 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+/* Book モデルを利用するため、Modelsを追加 */
+using QuickMaster.Models;
+
 namespace QuickMaster.Controllers
 {
     /* コントローラクラスを継承したHelloControllerクラスを作成 */
     public class HelloController : Controller
     {
+        /* Context 情報をプロパティとして持たせておく
+         * データベースへの接続の入口になる
+         */
+        private readonly MyContext _context;
+
+        public HelloController(MyContext context)
+        {
+            /* 引数で受け取ったcontext をプロパティに入れておき、
+             * 各アクションメソッドから利用できるようにする
+             */
+            this._context = context;
+        }
+
         /* index アクションメソッド
          * /hello, または /hello/index で表示される
          * デフォルト設定がStartup.csのConfigureに記述されている
@@ -35,6 +51,12 @@ namespace QuickMaster.Controllers
              * 今回であれば、 /Views/Hello/Greet.cshtml がデフォルトで呼び出される
              */
             return View();
+        }
+
+        public IActionResult List() 
+        {
+            /* context 情報からBook モデルをたどり、データベースのBookテーブルの情報を取り出す */
+            return View(this._context.Book);
         }
 
     }
