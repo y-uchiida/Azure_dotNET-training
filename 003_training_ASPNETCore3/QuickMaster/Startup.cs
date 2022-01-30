@@ -46,6 +46,7 @@ namespace QuickMaster
 
             app.UseAuthorization();
 
+            /* URLルーティング設定 */
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

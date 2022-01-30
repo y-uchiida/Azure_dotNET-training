@@ -1,0 +1,24 @@
+﻿@*
+    ここはコメント部分
+    Razor テンプレートはコントローラなどから呼び出されて変数を埋め込み完成する
+    デフォルトでレイアウト用のRazor テンプレートのコンテンツ部分として出力される
+    既定で選択されるレイアウトファイルは /Views/Shared/_Layout.cshtml
+    このファイル内の @RenderBody() 部分に、このテンプレートが出力される
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    /* コードブロック
+     * テンプレート内に、式を埋め込む(C#の処理を記述する)ことができる
+     */
+    ViewData["Title"] = "Greet";
+}
+
+@* テンプレート部分は、htmlがベースになる *@
+<h1>Greet: title = @ViewData["Title"]</h1>
+
+<p>@ViewData["Message"]</p>
+
+@* asp-action="indx" でリンクを生成する *@
+<div>
+    <a asp-action="index">Back to index</a>
+</div>
