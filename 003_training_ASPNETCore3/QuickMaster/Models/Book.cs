@@ -1,4 +1,7 @@
-﻿namespace QuickMaster.Models
+﻿/* DisplayName 属性を利用するため追加で読み込みしておく */
+using System.ComponentModel;
+
+namespace QuickMaster.Models
 {
     /* Book テーブルに対応するデータモデルとして、Book クラスを定義
      * 特別な継承関係を持たないプレーンなクラス（POCO: Plain Old Clr Object）
@@ -16,9 +19,18 @@
     public class Book
     {
         public int Id { get; set; }
+
+        /* [DisplayName("項目表示名")] で、ビューに表示する項目名称を設定 */
+        [DisplayName("書名")]
         public string Title { get; set; }
+
+        [DisplayName("価格")]
         public int Price { get; set; }
+
+        [DisplayName("出版社")]
         public string Publisher { get; set; }
+
+        [DisplayName("配布サンプル")]
         public bool Sample { get; set; }
     }
 }
