@@ -33,6 +33,10 @@ namespace QuickMaster.Controllers
         }
 
         // GET: Books/Details/5
+        /* URLからパラメータid を取得するため、アクションメソッドの引数に指定
+         * なお、今回はURLパラメータを取得しているが、同様の方法でGETストリングやPOSTのデータも取得できる
+         * GETストリングにもURLパラメータにも同名のものがあったらどうなるんだろう？？
+         */
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,13 +44,17 @@ namespace QuickMaster.Controllers
                 return NotFound();
             }
 
+            /* 引数id を条件にして、データベース内を検索
+             */
             var book = await _context.Book
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
+                /* 該当するレコードがなかった場合エラー(404 Not Found) */
                 return NotFound();
             }
 
+            /* 取得したbook オブジェクトをviewに渡す */
             return View(book);
         }
 
