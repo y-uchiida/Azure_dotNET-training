@@ -45,6 +45,9 @@ namespace QuickMaster.Controllers
             }
 
             /* 引数id を条件にして、データベース内を検索
+             * FirstOrDefaultAsync(m => 条件式)
+             * ラムダ式の引数m には、検索対象のモデルが渡される（今回の場合はBook）
+             * m.Id で、Bookテーブル内で Id が一致するデータを絞り込んで取得できる
              */
             var book = await _context.Book
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -67,16 +70,21 @@ namespace QuickMaster.Controllers
         // POST: Books/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+
+        [HttpPost] /* HttpPost 属性を指定して、POSTリクエストの場合にこちらの処理が実行されるように指定 */
         [ValidateAntiForgeryToken]
+        /* ポストされたデータを明示的にモデルバインドし、不正なデータを送られても脆弱性を生じないようにする
+         * 指定していない場合、POSTデータで書き換えられてはならないプロマティまで変更されてしまう恐れがある
+         */
         public async Task<IActionResult> Create([Bind("Id,Title,Price,Publisher,Sample")] Book book)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Add(book); /* 受け取ったモデルデータをコンテキストに追加 */
+                await _context.SaveChangesAsync(); /* SaveChanges でDBへ書き込みする */
+                return RedirectToAction(nameof(Index)); /* 一覧画面へリダイレクト */
             }
+            /* バリデーションを通過しなかった場合、登録をせずに元の画面へ戻す */
             return View(book);
         }
 
