@@ -93,15 +93,18 @@ namespace QuickMaster.Controllers
         {
             if (id == null)
             {
+                /* 引数 id がからの場合は404 */
                 return NotFound();
             }
 
+            /* リクエストされた引数をキーとしてDBから書籍情報を取得 */
             var book = await _context.Book.FindAsync(id);
             if (book == null)
             {
+                /* 見つからなければ404 */
                 return NotFound();
             }
-            return View(book);
+            return View(book); /* 取得できたデータをviewへ渡す */
         }
 
         // POST: Books/Edit/5
@@ -111,6 +114,7 @@ namespace QuickMaster.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Publisher,Sample")] Book book)
         {
+            /* hiddenで送ってあるid と、URLパラメータのidが異なっている場合はエラー、404扱いにする */
             if (id != book.Id)
             {
                 return NotFound();
@@ -120,23 +124,33 @@ namespace QuickMaster.Controllers
             {
                 try
                 {
+                    /* コンテキストに、Bookモデルに更新があることを反映
+                     * Update メソッドでは更新された状態であることをコンテキスト内で保持させるだけ
+                     * 保存の実行はSaveChangesAsync で行う
+                     */
+                    /*
+                     * コンテキストは、配下のモデルが「新規」「更新」「削除」「変更なし」のいずれの状態かを管理している
+                     * SaveChangesAsyncは、この状態を見て、INSERT/UPDATE/DELETE などのSQLを使い分けている
+                     */
                     _context.Update(book);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(); /* DBへの保存処理 */
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) /* 更新処理の競合が発生した場合 */
                 {
                     if (!BookExists(book.Id))
                     {
+                        /* 書籍が存在しなくなっていれば404にする */
                         return NotFound();
                     }
                     else
                     {
+                        /* 書籍は存在しているが例外が起きた場合、そのまま投げる */
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); /* 更新成功、一覧画面へリダイレクト */
             }
-            return View(book);
+            return View(book); /* バリデーションが通らなかった場合は、編集画面へ戻す */
         }
 
         // GET: Books/Delete/5
