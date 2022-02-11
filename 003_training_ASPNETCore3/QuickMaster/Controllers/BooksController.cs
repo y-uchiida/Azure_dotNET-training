@@ -158,6 +158,7 @@ namespace QuickMaster.Controllers
         {
             if (id == null)
             {
+                /* パラメータに引数id がない場合は404 */
                 return NotFound();
             }
 
@@ -165,25 +166,32 @@ namespace QuickMaster.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
+                /* 存在しないidが指定されていた場合は404 */
                 return NotFound();
             }
 
+            /* 削除対象として取得したデータをviewに渡す */
             return View(book);
         }
 
         // POST: Books/Delete/5
+        /* POSTメソッドでのリクエストであることに加えて、アクション名Deleteも合わせて指定
+         * これによって、Books/Delete に対するPOSTメソッドをこのアクションメソッドへルーティングできる
+         */
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Book.FindAsync(id);
-            _context.Book.Remove(book);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.Book.Remove(book); /* コンテキストに、データが削除対象であることを反映 */
+            await _context.SaveChangesAsync(); /* 削除を実行 */
+            return RedirectToAction(nameof(Index)); /* 一覧画面へリダイレクト */
         }
 
+        /* 指定したidがデータベース上に存在しているか判定する */
         private bool BookExists(int id)
         {
+            /* ラムダ式、 Book モデル(エンティティ e)のうち、引数で渡されたidに一致するものを返す */
             return _context.Book.Any(e => e.Id == id);
         }
     }
