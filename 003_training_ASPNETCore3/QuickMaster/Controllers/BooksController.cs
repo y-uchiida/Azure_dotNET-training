@@ -111,7 +111,11 @@ namespace QuickMaster.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+
+        /* 
+         * [ValidateAntiForgeryToken] 属性をつけると、 __RequestVerificationToken のフィールドに持っている
+         * ワンタイムトークンを確認し、CSRF攻撃を遮断する */
+        [ValidateAntiForgeryToken] 
         /* 更新処理の競合検出のため、Bind対象にRowVersionカラムを追加 */
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Publisher,Sample,RowVersion")] Book book)
         {
