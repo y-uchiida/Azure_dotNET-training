@@ -41,6 +41,17 @@ namespace QuickMaster.Models
 
         [DisplayName("配布サンプル")]
         public bool Sample { get; set; }
+        
+        /* 競合検出を行えるように、RowVersionカラムを追加
+         * データベースのテーブル定義にも反映させるため、Visual Studioのパッケージマネージャーコマンドを実行する
+         * PM> Add-Migration AddRowVersionToBook
+         * PM> Update-Database
+         * ---
+         * RowVersionカラムは、更新の際に自動的にインクリメントされる
+         * データ取得時のRowVersionと、更新時のRowVersionの値を比較することで、他の更新処理が行われたかどうかを検知することができる
+         */
+        [Timestamp] public byte[]
+        RowVersion { get; set; }
 
         /* 独自バリデーション設定を作成
          * IEnumerable 型を返すため、yield return を使ってValidationResultを返す
