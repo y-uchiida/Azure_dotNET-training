@@ -13,6 +13,6 @@ https://tech-blog.cloud-config.jp/2019-09-10-create-a-netcore-webapp-loosely-and
 以下のビデオの内容に取り組みます:  
 https://www.youtube.com/watch?v=C5cnZ-gZy2I
 
-## 003_ASPNETCore3_training(2022.01~)
+## 003_ASPNETCore3_training(2022.01~2022.02)
 ASP.Netの仕様や機能をもう少し深く理解するため、以下の書籍の内容に取り組みました  
 https://www.amazon.co.jp/dp/B07YZ59FDG/
