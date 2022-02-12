@@ -112,7 +112,8 @@ namespace QuickMaster.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Publisher,Sample")] Book book)
+        /* 更新処理の競合検出のため、Bind対象にRowVersionカラムを追加 */
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Price,Publisher,Sample,RowVersion")] Book book)
         {
             /* hiddenで送ってあるid と、URLパラメータのidが異なっている場合はエラー、404扱いにする */
             if (id != book.Id)
@@ -150,8 +151,9 @@ namespace QuickMaster.Controllers
                     }
                     else
                     {
-                        /* 書籍は存在しているが例外が起きた場合、そのまま投げる */
-                        throw;
+                        /* 書籍が存在している場合、エラーメッセージをもたせて編集画面に戻す(更新はしない) */
+                        ModelState.AddModelError(string.Empty, "更新の競合が検出されました");
+                        return View(book);
                     }
                 }
                 return RedirectToAction(nameof(Index)); /* 更新成功、一覧画面へリダイレクト */
