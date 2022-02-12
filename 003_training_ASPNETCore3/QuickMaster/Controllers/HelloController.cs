@@ -38,6 +38,11 @@ namespace QuickMaster.Controllers
             return Content("<h1>hello, ASP.Net Core 3!!</h1>");
         }
 
+
+        /* 基本的には /コントローラ名/アクションメソッド名でURLがルーティングされる
+         * [Route()]属性により、ルーティングするURLを設定することもできる
+         */
+        [Route("Foo/Bar")]
         public IActionResult Greet()
         {
             /* ViewBag オブジェクトは、Viewに引き渡されるデータを格納することができるオブジェクト

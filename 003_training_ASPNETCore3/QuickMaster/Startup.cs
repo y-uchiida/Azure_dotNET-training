@@ -57,12 +57,30 @@ namespace QuickMaster
             app.UseAuthorization();
 
             /* URLルーティング設定 */
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseEndpoints(
+                endpoints => {
+                    /* endpoints.MapControllerRoute() を複数記述することで、ルーティング条件を追加できる
+                     * 条件は上から順番に判定され、マッチしたらそれ以降のルーティング設定は判定されなくなる
+                     */
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=Index}/{id?}"
+                    );
+                    
+                    /* コントローラ({controller})もアクションメソッド名({action})もパターンに含まない場合
+                     * pattern にそのまま記載すればよいが、defaults にコントローラとメソッドを記載する必要がある
+                     * /Articles/{id} をルーティングする例
+                     */
+                    endpoints.MapControllerRoute(
+                        name: "ArticleRoute",
+                        pattern: "Articles/{id}",
+                        defaults: new {
+                            controller = "Home",
+                            action = "About"
+                        }
+                    );
+                }
+            );
         }
     }
 }
