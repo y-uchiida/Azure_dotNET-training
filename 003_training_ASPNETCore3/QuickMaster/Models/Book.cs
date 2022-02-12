@@ -1,6 +1,10 @@
 ﻿/* DisplayName 属性を利用するため追加で読み込みしておく */
 using System.ComponentModel;
 
+/* 独自バリデーションの作成のために読み込んでおく */
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace QuickMaster.Models
 {
     /* Book テーブルに対応するデータモデルとして、Book クラスを定義
@@ -16,21 +20,40 @@ namespace QuickMaster.Models
      * コンテキストクラスを通じて、データベースと連結して利用できるようになる
      * コンテキストクラスも、Models オブジェクト内に作成する
      */
-    public class Book
+    public class Book : IValidatableObject /* 独自バリデーションのため、IValidatableObject を実装(implements) */
     {
         public int Id { get; set; }
 
         /* [DisplayName("項目表示名")] で、ビューに表示する項目名称を設定 */
         [DisplayName("書名")]
+        /* [Required] 属性で、必須入力の項目として指定する(ErrorMassage 内の{0}は表示名(DisplayName)を表す) */
+        [Required(ErrorMessage = "{0}は必須です")]
         public string Title { get; set; }
 
         [DisplayName("価格")]
+        /* [Range(min, max)] 属性で値の範囲を指定する */
+        [Range(0, 5000, ErrorMessage = "{0} は {1}~{2}円の範囲で指定してください")]
         public int Price { get; set; }
 
         [DisplayName("出版社")]
+        [StringLength(20, ErrorMessage = "{0}は{1}文字以内で入力してください")]
         public string Publisher { get; set; }
 
         [DisplayName("配布サンプル")]
         public bool Sample { get; set; }
+
+        /* 独自バリデーション設定を作成
+         * IEnumerable 型を返すため、yield return を使ってValidationResultを返す
+         * これによって反復処理可能な ValidationResultsのコレクションにする
+         * このバリデーションは、プロパティの属性として定義した条件と違ってJavaScriptによる検証はされない
+         * リクエスト時にサーバ側でバリデーションしてエラーを検出する
+         */
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.Publisher == "フリー文庫" && this.Price > 0)
+            {
+                yield return new ValidationResult("フリー文庫の価格は０円でなければなりません。");
+            }
+        }
     }
 }

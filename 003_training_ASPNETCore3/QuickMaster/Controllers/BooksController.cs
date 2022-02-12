@@ -120,6 +120,12 @@ namespace QuickMaster.Controllers
                 return NotFound();
             }
 
+            /* 入力値の検証をして、問題なければDBへ反映
+             * 検証の条件は、Bookモデルのプロパティの宣言部分に、属性として指定する
+             * 以下はname プロパティを必須入力とする場合のモデルクラスの記述例
+             * > [Required(ErrorMassage = "入力必須です")]
+             * > public string name {get; set;}
+             */
             if (ModelState.IsValid)
             {
                 try

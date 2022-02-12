@@ -12,7 +12,10 @@
     <div class="col-md-4">
         @* asp-action はform要素のaction属性+method属性に該当、POST先のアクションメソッドを指定する(ここではCreate) *@
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger">
+                @* モデル全体に対するエラーメッセージの表示部分 *@
+            </div>
+
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -25,7 +28,9 @@
                 *@
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <span asp-validation-for="Price" class="text-danger">
+                    @* Title プロパティに対するエラーメッセージの表示部分 *@
+                </span>
             </div>
             <div class="form-group">
                 <label asp-for="Publisher" class="control-label"></label>
@@ -48,7 +53,7 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@*  *@
 @section Scripts {
+    @* 入力項目の検証のためのJavaScript ライブラリを読み込み *@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
